@@ -1,0 +1,3 @@
+Build Instructions:
+
+http://trac.openscenegraph.org/projects/osg//wiki/Build/CMake
