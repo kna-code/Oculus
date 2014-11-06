@@ -5,17 +5,15 @@
 #include "windows.h"
 #include "Input/XBOXController.h"
 
-
-
 #include <osgDB/ReadFile>
 #include <osgUtil/Optimizer>
 #include <osg/CoordinateSystemNode>
-
 #include <osg/Switch>
 #include <osgText/Text>
-
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
+
+#include "World/World.h"
 
 
 int TestXBox()
@@ -47,16 +45,20 @@ int TestScene()
 	const std::string fileName = "C:\\Dev\\GitHub\\Oculus\\Lib\\OpenSceneGraph\\3.2.1\\data\\cow.osgt";
 
 	osgViewer::Viewer viewer;
-	osg::ref_ptr<osg::Node> loadedModel = osgDB::readNodeFile( fileName );
+	/*
+	osg::ref_ptr<osg::Node> scene = osgDB::readNodeFile( fileName );	
 	if(!loadedModel)
 	{
 		printf("Failed to load: %s\n", fileName.c_str());
 		return 1;
 	}
+	*/
+	World world;
+	osg::ref_ptr<osg::Node> scene = world.GetRoot();
 
 	osgUtil::Optimizer optimizer;
-    optimizer.optimize(loadedModel.get());
-    viewer.setSceneData( loadedModel.get() );
+    optimizer.optimize(scene.get());
+    viewer.setSceneData( scene.get() );
     viewer.realize();
 
 	return viewer.run();
