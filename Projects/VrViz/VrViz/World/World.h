@@ -4,9 +4,10 @@
 
 namespace osg
 {
+	class DrawElementsUInt;
 	class Geometry;
 	class Group;	
-	class Node;
+	class Node;	
 }
 
 class World
@@ -24,4 +25,5 @@ public:
 private:
 
 	osg::Geometry * CreateGeometry();
+	osg::DrawElementsUInt* World::CreateQuad(int v0, int v1, int v2, int v3);
 };
