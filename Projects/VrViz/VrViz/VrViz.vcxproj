@@ -60,6 +60,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\Lib\VsPropertySheets\General.props" />
     <Import Project="..\..\..\Lib\VsPropertySheets\OpenSceneGraph.3.2.1-x64d.props" />
+    <Import Project="..\..\..\Lib\VsPropertySheets\Infrastructure.props" />
     <Import Project="..\..\..\Lib\VsPropertySheets\XInput-x64d.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -151,13 +152,11 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Input\XBOXController.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="World\World.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Input\XBOXController.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -3,6 +3,8 @@
 
 #include "stdafx.h"
 #include "windows.h"
+
+// Infrastructure Libraries
 #include "Input/XBOXController.h"
 
 #include <osgDB/ReadFile>
@@ -12,9 +14,12 @@
 #include <osgText/Text>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
+#include <osgGA/KeySwitchMatrixManipulator>
+#include <osgGA/FirstPersonManipulator>
 
 #include "World/World.h"
 
+using namespace Infrastructure;
 
 int TestXBox()
 {
@@ -22,16 +27,22 @@ int TestXBox()
 
 	while(1)
 	{
+		p1->Update();
+
 		if(p1->IsConnected())
 		{
 			printf("Connected\n");
+			
+			const Vec2 left = p1->GetLeftThumbStickPosition();
+			const Vec2 right = p1->GetRightThumbStickPosition();
+			printf("Left Stick: [%f %f]\t\tRightStick: [%f %f]\n", left.x, left.y, right.x, right.y);
 		}
 		else
 		{
 			printf("Not Connected\n");
 		}
 		
-		Sleep(100);
+		Sleep(500);
 	}
 
 	delete p1;
@@ -42,10 +53,17 @@ int TestXBox()
 
 int TestScene()
 {
-	const std::string fileName = "C:\\Dev\\GitHub\\Oculus\\Lib\\OpenSceneGraph\\3.2.1\\data\\cow.osgt";
-
 	osgViewer::Viewer viewer;
-	/*
+	
+    // set up the camera manipulators.
+    {
+        osg::ref_ptr<osgGA::KeySwitchMatrixManipulator> keyswitchManipulator = new osgGA::KeySwitchMatrixManipulator;
+        keyswitchManipulator->addMatrixManipulator( '1', "FirstPerson", new osgGA::FirstPersonManipulator() );
+        viewer.setCameraManipulator( keyswitchManipulator.get() );
+    }
+
+	/*	
+	const std::string fileName = "C:\\Dev\\GitHub\\Oculus\\Lib\\OpenSceneGraph\\3.2.1\\data\\cow.osgt";
 	osg::ref_ptr<osg::Node> scene = osgDB::readNodeFile( fileName );	
 	if(!loadedModel)
 	{
@@ -67,7 +85,8 @@ int TestScene()
 int _tmain(int argc, _TCHAR* argv[])
 {
 	
-	TestScene();
+	//TestScene();
+	TestXBox();
 	
 
 	return 0;

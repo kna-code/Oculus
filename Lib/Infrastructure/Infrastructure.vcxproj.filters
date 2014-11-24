@@ -13,8 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="World">
-      <UniqueIdentifier>{33361846-488b-4a0d-a924-cd7bb68c7726}</UniqueIdentifier>
+    <Filter Include="Input">
+      <UniqueIdentifier>{c9d7b053-290d-46e0-b914-f9bd2fa2ca4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="General">
+      <UniqueIdentifier>{0c83b025-7b38-4ab7-92e4-8e7779a41090}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -27,19 +30,28 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="World\World.h">
-      <Filter>World</Filter>
+    <ClInclude Include="Input\XBOXController.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Types.h">
+      <Filter>General</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Vector.h">
+      <Filter>General</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Infrastructure.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="World\World.cpp">
-      <Filter>World</Filter>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\XBOXController.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
