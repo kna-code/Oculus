@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "XBOXController.h"
+#include "XBOXControllerEvent.hpp"
 #include <math.h>
+#include "General\EventBus.hpp"
 
 namespace Infrastructure
 {
@@ -43,7 +45,7 @@ void XBOXController::Update()
 			CopyMemory(&m_currentState, &state, sizeof(XINPUT_STATE));
 		}
 
-		// TODO: Trigger events based on the change in state.		
+		BroadcastEvents();	
     }
     else
     {		
@@ -180,5 +182,33 @@ float XBOXController::NormalizeTiggerPosition(int value, int deadZone)
 	}
 }
 
+void XBOXController::BroadcastEvents()
+{
+	BroadcastControlPressed(XBOXControlId::DPAD_UP);
+	BroadcastControlPressed(XBOXControlId::DPAD_DOWN);
+	BroadcastControlPressed(XBOXControlId::DPAD_LEFT);
+	BroadcastControlPressed(XBOXControlId::DPAD_RIGHT);
+	BroadcastControlPressed(XBOXControlId::START);
+	BroadcastControlPressed(XBOXControlId::BACK);
+	BroadcastControlPressed(XBOXControlId::LEFT_THUMB);
+	BroadcastControlPressed(XBOXControlId::RIGHT_THUMB);
+	BroadcastControlPressed(XBOXControlId::LEFT_SHOULDER);
+	BroadcastControlPressed(XBOXControlId::RIGHT_SHOULDER);
+	BroadcastControlPressed(XBOXControlId::GAMEPAD_A);
+	BroadcastControlPressed(XBOXControlId::GAMEPAD_B);
+	BroadcastControlPressed(XBOXControlId::GAMEPAD_X);
+	BroadcastControlPressed(XBOXControlId::GAMEPAD_Y);
+}
+
+void XBOXController::BroadcastControlPressed(XBOXControlId control)
+{
+	int previousSet = m_previousState.Gamepad.wButtons & control;
+	int currentSet = m_currentState.Gamepad.wButtons & control;
+	if( !previousSet && currentSet )
+	{
+		XBOXControllerEvent e(this, this, control);
+		EventBus::FireEvent(e);
+	}
+}
 
 }

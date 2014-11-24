@@ -39,6 +39,24 @@
     <ClInclude Include="General\Vector.h">
       <Filter>General</Filter>
     </ClInclude>
+    <ClInclude Include="General\Event.hpp">
+      <Filter>General</Filter>
+    </ClInclude>
+    <ClInclude Include="General\EventBus.hpp">
+      <Filter>General</Filter>
+    </ClInclude>
+    <ClInclude Include="General\EventHandler.hpp">
+      <Filter>General</Filter>
+    </ClInclude>
+    <ClInclude Include="General\HandlerRegistration.hpp">
+      <Filter>General</Filter>
+    </ClInclude>
+    <ClInclude Include="General\Object.hpp">
+      <Filter>General</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\XBOXControllerEvent.hpp">
+      <Filter>Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -52,6 +70,9 @@
     </ClCompile>
     <ClCompile Include="Input\XBOXController.cpp">
       <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="General\EventBus.cpp">
+      <Filter>General</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

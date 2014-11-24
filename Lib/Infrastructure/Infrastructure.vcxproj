@@ -84,9 +84,15 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="General\Event.hpp" />
+    <ClInclude Include="General\EventBus.hpp" />
+    <ClInclude Include="General\EventHandler.hpp" />
+    <ClInclude Include="General\HandlerRegistration.hpp" />
+    <ClInclude Include="General\Object.hpp" />
     <ClInclude Include="General\Types.h" />
     <ClInclude Include="General\Vector.h" />
     <ClInclude Include="Input\XBOXController.h" />
+    <ClInclude Include="Input\XBOXControllerEvent.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -99,6 +105,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="General\EventBus.cpp" />
     <ClCompile Include="Infrastructure.cpp" />
     <ClCompile Include="Input\XBOXController.cpp" />
     <ClCompile Include="stdafx.cpp">

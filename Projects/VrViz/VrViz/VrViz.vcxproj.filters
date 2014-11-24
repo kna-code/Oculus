@@ -16,6 +16,9 @@
     <Filter Include="World">
       <UniqueIdentifier>{33361846-488b-4a0d-a924-cd7bb68c7726}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{cf9a187a-9e46-4f9e-b3a0-d3f1ab01dbb4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -30,6 +33,12 @@
     <ClInclude Include="World\World.h">
       <Filter>World</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Demo.hpp">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\DemoEventHandler.hpp">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -40,6 +49,12 @@
     </ClCompile>
     <ClCompile Include="World\World.cpp">
       <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Demo.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\DemoEventHandler.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -10,6 +10,7 @@
 #include <windows.h>
 #include <XInput.h>
 #include "../General/Types.h"
+#include "../General/Object.hpp"
 
 // Now, the XInput Library
 // NOTE: COMMENT THIS OUT IF YOU ARE NOT USING
@@ -39,7 +40,7 @@ enum XBOXControlId
 };
 
 // XBOX Controller Class Definition
-class XBOXController
+class XBOXController : public Object
 {
 private:
 	XINPUT_STATE m_previousState;
@@ -69,7 +70,9 @@ public:
 
 private:
 	Vec2 NormalizeThumbStickPosition(int x, int y, int deadZone);
-	float NormalizeTiggerPosition(int value, int deadZone);		
+	float NormalizeTiggerPosition(int value, int deadZone);	
+	void BroadcastEvents();
+	void BroadcastControlPressed(XBOXControlId control);
 };
 
 inline bool XBOXController::IsConnected()

@@ -18,6 +18,7 @@
 #include <osgGA/FirstPersonManipulator>
 
 #include "World/World.h"
+#include "Game/Demo.hpp"
 
 using namespace Infrastructure;
 
@@ -84,12 +85,19 @@ int TestScene()
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	
-	//TestScene();
-	TestXBox();
-	
+	try
+	{
+		//TestScene();
+		//TestXBox();
+		Demo demo;
+		demo.Run();
 
-	return 0;
+		return 0;
+	}
+	catch (std::runtime_error & e)
+	{
+		printf("Runtime exception: %s\n", e.what());
+	}
 }
 
 
