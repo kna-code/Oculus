@@ -29,36 +29,32 @@ void DemoRenderer::Initialize()
 	m_pWorld = new World();
 	m_viewer = CreateViewer();
 	m_view = CreateView();
-
 	
 	// Initialize the Viewer for the data.
 	m_viewer->addView(m_view);
     m_viewer->setReleaseContextAtEndOfFrameHint(false);
 	m_viewer->realize();
-
 }
 
 void DemoRenderer::Update()
-{
+{	
+	UpdateCamera();
 	m_viewer->frame();
 }
 
 void DemoRenderer::SetCameraPosition(const osg::Vec3d pos)
 {
 	m_CameraPos = pos;
-	UpdateCamera();
 }
 
 void DemoRenderer::SetCameraPitch(const float pitch)
 {
-	m_CameraPitch = min(max(pitch, -90.0f), 90.0f);
-	UpdateCamera();
+	m_CameraPitch = pitch;
 }
 
 void DemoRenderer::SetCameraYaw(const float yaw)
 {
-	m_CameraYaw = min(max(yaw,  -90.0f), 90.0f);
-	UpdateCamera();
+	m_CameraYaw = yaw;
 }
 
 void DemoRenderer::GetCameraPosition(osg::Vec3d &pos)
@@ -131,20 +127,19 @@ osgViewer::View * DemoRenderer::CreateView()
 	view->setName("View one");		
 	view->setUpViewOnSingleScreen(0);
 	view->setSceneData(m_pWorld->GetRoot());
-
 	return view;
 }
 
-
-
 void DemoRenderer::UpdateCamera()
 {
-	osg::Matrixd translation, rotationX, rotationY;
+	osg::Matrixd translation, rotation;
 	translation.makeTranslate(m_CameraPos);
-	rotationX.makeRotate(m_CameraPitch, osg::Vec3(1.0, 0.0, 0.0));
-	rotationY.makeRotate(m_CameraYaw, osg::Vec3(0.0, 1.0, 0.0));
+	rotation.makeRotate(
+          0, osg::Vec3(0,1,0), // roll
+          osg::DegreesToRadians(m_CameraPitch), osg::Vec3(1,0,0) , // pitch
+          osg::DegreesToRadians(m_CameraYaw), osg::Vec3(0,0,1) ); // heading 
 
-	osg::Matrixd transform = translation * rotationX * rotationY;
-
-	m_view->getCamera()->setViewMatrix(transform);
+	osg::Matrixd cameraMatrix;
+	cameraMatrix.invert( rotation * translation);
+	m_view->getCamera()->setViewMatrix(cameraMatrix);
 }

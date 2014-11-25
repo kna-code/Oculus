@@ -57,14 +57,15 @@ void Demo::Run()
 		if(m_Run)
 		{
 			const osg::Vec3 &pos = m_pPlayer->GetPosition();
-			const osg::Vec3 &rot = m_pPlayer->GetRotation();
-			printf("Player: X=%.3f, Y=%.3f, Z=%0.3f, Pitch=%0.4f, Yaw=%0.3f\n",
-				pos.x(), pos.y(), pos.x(), rot.x(), rot.y());
+			const float angleVert = m_pPlayer->GetViewAngleVertical();
+			const float angleHoriz = m_pPlayer->GetViewAngleHorizontal();
+			printf("Player: X=%.1f\tY=%.1f\tZ=%0.1f\tPitch=%0.1f\tYaw=%0.1f\n",
+				pos.x(), pos.y(), pos.z(), angleVert, angleHoriz);
 
 			// Update the Camera for the player & render the scene.
 			m_pRenderer->SetCameraPosition(pos);
-			m_pRenderer->SetCameraPitch(rot.x());
-			m_pRenderer->SetCameraYaw(rot.y());
+			m_pRenderer->SetCameraPitch(angleVert);
+			m_pRenderer->SetCameraYaw(angleHoriz);
 			m_pRenderer->Update();
 			Sleep(100);
 		}
@@ -91,4 +92,9 @@ void Demo::Stop()
 	}
 	m_EventRegistrations.clear();
 
+}
+
+void Demo::Reset()
+{
+	m_pPlayer->Reset();
 }

@@ -22,7 +22,7 @@ void DemoEventHandler::onEvent(Infrastructure::XBOXControllerButtonEvent * e)
 		return;
 	}
 
-	printf("XBOXControllerButtonEvent: %d\t%d\n", e->GetButtonId(), e->GetEventType());
+	//printf("XBOXControllerButtonEvent: %d\t%d\n", e->GetButtonId(), e->GetEventType());
 
 	if(e->GetEventType() == ButtonEventType::BUTTON_PRESSED)
 	{
@@ -31,7 +31,9 @@ void DemoEventHandler::onEvent(Infrastructure::XBOXControllerButtonEvent * e)
 		case XBOXButtonId::BACK:
 			m_pDemo->Stop();
 			break;
-
+		case XBOXButtonId::START:
+			m_pDemo->Reset();
+			break;
 		default:
 			break;
 		}

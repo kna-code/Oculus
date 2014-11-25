@@ -12,17 +12,21 @@ namespace Infrastructure
 class Player : public Infrastructure::EventHandler<Infrastructure::XBOXControllerUpdateEvent>
 {
 private:
-	float m_velocity;
+	float m_moveVelocity;
+	float m_rotateVelocity;
 	osg::Vec3 m_position;
-	osg::Vec3 m_rotation;
+	float m_viewAngleVertical;
+	float m_viewAngleHorizontal;
 
 public:
 	Player();
 
 	void Update();
+	void Reset();
 
 	const osg::Vec3& GetPosition() const;
-	const osg::Vec3& GetRotation() const;
+	const float GetViewAngleVertical() const;
+	const float GetViewAngleHorizontal() const;
 
 	// Event Handlers	
 	virtual void onEvent(Infrastructure::XBOXControllerUpdateEvent* e);
@@ -34,7 +38,12 @@ inline const osg::Vec3& Player::GetPosition() const
 	return m_position;
 }
 
-inline const osg::Vec3& Player::GetRotation() const
+inline const float Player::GetViewAngleVertical() const
 {
-	return m_rotation;
+	return m_viewAngleVertical;
+}
+
+inline const float Player::GetViewAngleHorizontal() const
+{
+	return m_viewAngleHorizontal;
 }

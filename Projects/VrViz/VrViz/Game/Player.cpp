@@ -1,20 +1,30 @@
 #include "stdafx.h"
 #include "Player.hpp"
 #include <Input\XBOXControllerUpdateEvent.h>
+#include <math.h>
 
 using namespace Infrastructure;
 
 Player::Player()
-	: m_velocity(0.1f)
-	, m_position(0, 0, 0)
-	, m_rotation(0, 0, 0)
+	: m_moveVelocity(1.0f)
+	, m_rotateVelocity(1.0f)
+	, m_position(0, 0, 1.0)
+	, m_viewAngleVertical(0)
+	, m_viewAngleHorizontal(0)
 {
-
+	Reset();
 }
 
 void Player::Update()
 {
 
+}
+
+void Player::Reset()
+{
+	m_position = osg::Vec3d(0, 0, 10.0);
+	m_viewAngleVertical = 90;
+	m_viewAngleHorizontal = 0;
 }
 
 // -------------------------------------------------------------------------------------
@@ -27,14 +37,25 @@ void Player::onEvent(Infrastructure::XBOXControllerUpdateEvent* e)
 	auto movementVector = e->GetLeftThumbStickPosition();
 	auto rotationVector = e->GetRightThumbStickPosition();
 
-	// Todo: Correctly handle velocity on the diagonal instead
-	// of applying it directly to both legs.
+	// Up/Down View orientation: -90 to 90 Degrees
+	m_viewAngleVertical += (-rotationVector.y)*m_rotateVelocity;
+	m_viewAngleVertical = max(min(m_viewAngleVertical, 180.0f), 0.0f);
 
-	float xPos = m_position.x()+ movementVector.x*m_velocity;
-	float yPos = m_position.y() + movementVector.y*m_velocity;
+	// Left/Right orientation: 0 to 360 Degress
+	m_viewAngleHorizontal = m_viewAngleHorizontal += rotationVector.x*m_rotateVelocity;
+	while(m_viewAngleHorizontal < 0 )
+	{
+		m_viewAngleHorizontal += 360;
+	}
+	while(m_viewAngleHorizontal > 360)
+	{
+		m_viewAngleHorizontal -= 360;
+	}
+
+	// Update the position taking the horizontal view angle int account
+
+	float xPos = m_position.x() + movementVector.x*m_moveVelocity*tan(osg::DegreesToRadians(m_viewAngleHorizontal));
+	float yPos = m_position.y() + movementVector.y*m_moveVelocity*tan(osg::DegreesToRadians(m_viewAngleHorizontal-90));
 	m_position = osg::Vec3(xPos, yPos, 1);
 
-	float xRot = rotationVector.x*90;;
-	float yRot = rotationVector.y*90;
-	m_rotation = osg::Vec3(xRot, yRot, 0);
 }

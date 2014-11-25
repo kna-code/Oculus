@@ -5,6 +5,8 @@
 #include <osg\Geode>
 #include <osg\Node>
 #include <osg\Array>
+#include <osg\Transform>
+#include <osg\PositionAttitudeTransform>
 
 
 // ------------------------------------------------------------------------------------------------------------------------
@@ -14,11 +16,15 @@
 World::World()
 {
 	m_Root = new osg::Group();
-	osg::Geode* geode = new osg::Geode();
-	osg::Geometry * geometry = CreateGeometry();
+	osg::Geode * geode = CreateCheckerBoard(10, 10);
 
-	geode->addDrawable(geometry); 
-    m_Root->addChild(geode);
+	// Center the world at 0,0
+	osg::BoundingBox bounds = geode->getBoundingBox();
+	osg::PositionAttitudeTransform *centerNode = new osg::PositionAttitudeTransform();
+	centerNode->setPosition(osg::Vec3(-bounds.center().x(), -bounds.center().y(), -bounds.center().z()));
+	centerNode->addChild(geode);
+    
+	m_Root->addChild(centerNode);
 }
 
 // ------------------------------------------------------------------------------------------------------------------------
@@ -42,51 +48,6 @@ osg::Node * World::GetRoot()
 // Private Methods
 // ------------------------------------------------------------------------------------------------------------------------
 
-osg::Geometry * World::CreateGeometry()
-{
-	osg::Geometry * geometry = new osg::Geometry();
-
-	// Create the vertices
-	osg::Vec3Array* verts = new osg::Vec3Array;
-	verts->push_back( osg::Vec3( 0, 0, 0) ); // bottom front left
-	verts->push_back( osg::Vec3(10, 0, 0) ); // bottom front right
-	verts->push_back( osg::Vec3(10,10, 0) ); // bottom back right 
-	verts->push_back( osg::Vec3( 0,10, 0) ); // bottom back left 
-	verts->push_back( osg::Vec3( 0, 0, 10) ); // top front left
-	verts->push_back( osg::Vec3(10, 0, 10) ); // top front right
-	verts->push_back( osg::Vec3(10,10, 10) ); // top back right 
-	verts->push_back( osg::Vec3( 0,10, 10) ); // top back left 
-
-	// Add the verts to the geometry
-	geometry->setVertexArray( verts ); 
-
-	// Add the primitive sets
-	geometry->addPrimitiveSet(CreateQuad(3, 2, 1, 0)); // Bottom
-	geometry->addPrimitiveSet(CreateQuad(7, 6, 5, 4)); // Top
-	geometry->addPrimitiveSet(CreateQuad(5, 4, 0, 1)); // Front
-	geometry->addPrimitiveSet(CreateQuad(7, 6, 2, 3)); // Back
-	geometry->addPrimitiveSet(CreateQuad(7, 4, 0, 3)); // Left
-	geometry->addPrimitiveSet(CreateQuad(6, 5, 1, 2)); // Right
-	// Declare and load an array of Vec4 elements to store colors.
-
-	osg::Vec4Array* colors = new osg::Vec4Array;
-	colors->push_back(osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f) ); //index 0 red
-	colors->push_back(osg::Vec4(0.0f, 1.0f, 0.0f, 1.0f) ); //index 1 green
-	colors->push_back(osg::Vec4(0.0f, 0.0f, 1.0f, 1.0f) ); //index 2 blue
-	colors->push_back(osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f) ); //index 3 white 
-	colors->push_back(osg::Vec4(1.0f, 0.0f, 0.0f, 1.0f) ); //index 4 red
-	colors->push_back(osg::Vec4(0.0f, 1.0f, 1.0f, 1.0f) ); //index 5 yellow
-	colors->push_back(osg::Vec4(1.0f, 0.0f, 1.0f, 1.0f) ); //index 6 purple
-	colors->push_back(osg::Vec4(0.0f, 0.0f, 0.0f, 1.0f) ); //index 7 black
-  
-   
-	// Declare the variable that will match vertex array elements to color array elements. 
-	geometry->setColorArray(colors);
-	geometry->setColorBinding(osg::Geometry::BIND_PER_VERTEX);
-
-	return geometry;
-}
-
 osg::DrawElementsUInt* World::CreateQuad(int v0, int v1, int v2, int v3)
 {
 	osg::DrawElementsUInt* quad = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 0);
@@ -96,4 +57,55 @@ osg::DrawElementsUInt* World::CreateQuad(int v0, int v1, int v2, int v3)
 	quad->push_back(v3);
 
 	return quad;
+}
+
+osg::Geode * World::CreateCheckerBoard(float checkSize, int numChecks)
+{	
+	osg::Geode* geode = new osg::Geode();
+	
+	osg::Vec4 color1(0.0, 0.0, 0.0, 1.0);
+	osg::Vec4 color2(1.0, 1.0, 1.0, 1.0);
+
+	// Create the Geometry for each square
+	// TODO: This could probablly be done as one piece of geometry with all the vertices.
+	for(int x = 0; x < numChecks; ++x)
+	{
+		bool useColor1 = x%2 == 0;
+
+		for(int y = 0; y < numChecks; ++y)
+		{
+			float xPos = x*checkSize;
+			float yPos = y*checkSize;
+						
+			osg::Geometry * geometry = new osg::Geometry();
+
+			// Creat the vertices
+			osg::Vec3Array* verts = new osg::Vec3Array();
+			verts->push_back( osg::Vec3( xPos, yPos, 0) ); 
+			verts->push_back( osg::Vec3( xPos, yPos + checkSize, 0) ); 
+			verts->push_back( osg::Vec3( xPos + checkSize, yPos + checkSize, 0) ); 
+			verts->push_back( osg::Vec3( xPos + checkSize, yPos, 0) ); 
+			geometry->setVertexArray( verts ); 
+			geometry->addPrimitiveSet(CreateQuad(0, 1, 2, 3)); 
+			
+			// Create the colors
+			osg::Vec4Array* colors = new osg::Vec4Array();
+			osg::Vec4 color = useColor1 ? color1 : color2;
+			colors->push_back(color);
+			colors->push_back(color);
+			colors->push_back(color);
+			colors->push_back(color);
+
+			// Add to the geometry			
+			geometry->setColorArray(colors);
+			geometry->setColorBinding(osg::Geometry::BIND_PER_VERTEX);
+			geode->addDrawable(geometry);	
+
+
+			// Flip the color
+			useColor1 = !useColor1;
+		}
+	}	
+
+	return geode;
 }

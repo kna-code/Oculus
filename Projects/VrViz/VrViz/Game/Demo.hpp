@@ -34,4 +34,5 @@ public:
 
 	void Run();
 	void Stop();
+	void Reset();
 };
