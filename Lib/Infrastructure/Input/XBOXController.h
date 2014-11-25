@@ -59,8 +59,8 @@ public:
 	void Update();
 	void Vibrate(int leftVal = 0, int rightVal = 0);
 
-	Vec2 GetLeftThumbStickPosition();
-	Vec2 GetRightThumbStickPosition();
+	bool GetLeftThumbStickPosition(Vec2 &outValue);
+	bool GetRightThumbStickPosition(Vec2 &outValue);
 	float GetLeftTriggerPosition();
 	float GetRightTriggerPosition();
 
@@ -69,7 +69,7 @@ public:
 	XINPUT_STATE GetCurrentState();
 
 private:
-	Vec2 NormalizeThumbStickPosition(int x, int y, int deadZone);
+	void NormalizeThumbStickPosition(int x, int y, int deadZone, Vec2 &outValue);
 	float NormalizeTiggerPosition(int value, int deadZone);	
 	void BroadcastEvents();
 	void BroadcastControlPressed(XBOXControlId control);

@@ -34,8 +34,9 @@ int TestXBox()
 		{
 			printf("Connected\n");
 			
-			const Vec2 left = p1->GetLeftThumbStickPosition();
-			const Vec2 right = p1->GetRightThumbStickPosition();
+			Vec2 left, right;
+			p1->GetLeftThumbStickPosition(left);
+			p1->GetRightThumbStickPosition(right);
 			printf("Left Stick: [%f %f]\t\tRightStick: [%f %f]\n", left.x, left.y, right.x, right.y);
 		}
 		else
@@ -88,9 +89,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	try
 	{
 		//TestScene();
-		//TestXBox();
-		Demo demo;
-		demo.Run();
+		TestXBox();
+		//Demo demo;
+		//demo.Run();
 
 		return 0;
 	}

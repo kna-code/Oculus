@@ -78,26 +78,32 @@ void XBOXController::Vibrate(int leftVal, int rightVal)
     XInputSetState(m_controllerNum, &vibration);
 }
 
-Vec2 XBOXController::GetLeftThumbStickPosition()
+bool XBOXController::GetLeftThumbStickPosition(Vec2 &outValue)
 {
 	if(!IsConnected())
 	{
-		return Vec2(0.0f, 0.0f);
+		outValue.x = 0.0f;
+		outValue.y = 0.0f;
+		return false;
 	}
 
 	XINPUT_STATE state = GetCurrentState();
-	return NormalizeThumbStickPosition( state.Gamepad.sThumbLX,  state.Gamepad.sThumbLY, m_deadzoneLeftThumb);
+	NormalizeThumbStickPosition( state.Gamepad.sThumbLX,  state.Gamepad.sThumbLY, m_deadzoneLeftThumb, outValue);
+	return true;
 }
 
-Vec2 XBOXController::GetRightThumbStickPosition()
+bool XBOXController::GetRightThumbStickPosition(Vec2 &outValue)
 {
 	if(!IsConnected())
 	{
-		return Vec2(0.0f, 0.0f);
+		outValue.x = 0.0f;
+		outValue.y = 0.0f;;
+		return false;
 	}
 
 	XINPUT_STATE state = GetCurrentState();
-	return NormalizeThumbStickPosition( state.Gamepad.sThumbRX, state.Gamepad.sThumbRY, m_deadzoneRightThumb);
+    NormalizeThumbStickPosition( state.Gamepad.sThumbRX, state.Gamepad.sThumbRY, m_deadzoneRightThumb, outValue);
+	return true;
 }
 
 float XBOXController::GetLeftTriggerPosition()
@@ -125,38 +131,22 @@ float XBOXController::GetRightTriggerPosition()
 // Private Methods
 //-----------------------------------------------------------------------------------
 
-Vec2 XBOXController::NormalizeThumbStickPosition(int x, int y, int deadZone)
+void XBOXController::NormalizeThumbStickPosition(int x, int y, int deadZone, Vec2 &outValue)
 {
 	//determine how far the controller is pushed
 	float magnitude = sqrt(float(x*x) + float(y*y));
 
-	//determine the direction the controller is pushed
-	float normalizedX = float(x) / magnitude;
-	float normalizedY = float(y) / magnitude;
-
-	float normalizedMagnitude = 0;
-
 	//check if the controller is outside a circular dead zone
 	if (magnitude > deadZone)
 	{
-	  //clip the magnitude at its expected maximum value
-	  if (magnitude > 32767) magnitude = 32767;
-  
-	  //adjust magnitude relative to the end of the dead zone
-	  magnitude -= deadZone;
-
-	  //optionally normalize the magnitude with respect to its expected range
-	  //giving a magnitude value of 0.0 to 1.0
-	  normalizedMagnitude = magnitude / (32767 - deadZone);
-
-	  return Vec2(normalizedX, normalizedY);
+	  //determine the direction the controller is pushed
+	  outValue.x = min(max(float(x)/magnitude, -1.0f), 1.0f);
+	  outValue.y = min(max(float(y)/magnitude, -1.0f), 1.0f);
 	}
 	else //if the controller is in the deadzone zero out the magnitude
 	{
-		magnitude = 0.0;
-		normalizedMagnitude = 0.0;
-
-		return Vec2(0.0f, 0.0f);
+		outValue.x = 0.0f;
+		outValue.y = 0.0f;
 	}
 }
 

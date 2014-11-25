@@ -8,8 +8,13 @@ template <class T>
 class Vector2
 {
 	public:
-		T& x;
-		T& y;
+		T x;
+		T y;
+
+		Vector2(): x(T(0)), y(T(0))
+		{
+		}
+
 		Vector2(T a, T b) : x(a), y(b)
 		{
 		}
@@ -30,9 +35,13 @@ template <class T>
 class Vector3
 {
 	public:
-		T& x;
-		T& y;
-		T& z;
+		T x;
+		T y;
+		T z;
+
+		Vector3(): x(T(0)), y(T(0)), z(T(0))
+		{
+		}
 
 		Vector3(T a, T b, T c) : x(a), y(b), z(c)
 		{
