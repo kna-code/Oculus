@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "XBOXController.h"
-#include "XBOXControllerEvent.hpp"
+#include "XBOXControllerButtonEvent.h"
+#include "XBOXControllerUpdateEvent.h"
 #include <math.h>
 #include "General\EventBus.hpp"
 
@@ -174,29 +175,41 @@ float XBOXController::NormalizeTiggerPosition(int value, int deadZone)
 
 void XBOXController::BroadcastEvents()
 {
-	BroadcastControlPressed(XBOXControlId::DPAD_UP);
-	BroadcastControlPressed(XBOXControlId::DPAD_DOWN);
-	BroadcastControlPressed(XBOXControlId::DPAD_LEFT);
-	BroadcastControlPressed(XBOXControlId::DPAD_RIGHT);
-	BroadcastControlPressed(XBOXControlId::START);
-	BroadcastControlPressed(XBOXControlId::BACK);
-	BroadcastControlPressed(XBOXControlId::LEFT_THUMB);
-	BroadcastControlPressed(XBOXControlId::RIGHT_THUMB);
-	BroadcastControlPressed(XBOXControlId::LEFT_SHOULDER);
-	BroadcastControlPressed(XBOXControlId::RIGHT_SHOULDER);
-	BroadcastControlPressed(XBOXControlId::GAMEPAD_A);
-	BroadcastControlPressed(XBOXControlId::GAMEPAD_B);
-	BroadcastControlPressed(XBOXControlId::GAMEPAD_X);
-	BroadcastControlPressed(XBOXControlId::GAMEPAD_Y);
+	BroadcastButtonEvents(XBOXButtonId::DPAD_UP);
+	BroadcastButtonEvents(XBOXButtonId::DPAD_DOWN);
+	BroadcastButtonEvents(XBOXButtonId::DPAD_LEFT);
+	BroadcastButtonEvents(XBOXButtonId::DPAD_RIGHT);
+	BroadcastButtonEvents(XBOXButtonId::START);
+	BroadcastButtonEvents(XBOXButtonId::BACK);
+	BroadcastButtonEvents(XBOXButtonId::LEFT_THUMB);
+	BroadcastButtonEvents(XBOXButtonId::RIGHT_THUMB);
+	BroadcastButtonEvents(XBOXButtonId::LEFT_SHOULDER);
+	BroadcastButtonEvents(XBOXButtonId::RIGHT_SHOULDER);
+	BroadcastButtonEvents(XBOXButtonId::GAMEPAD_A);
+	BroadcastButtonEvents(XBOXButtonId::GAMEPAD_B);
+	BroadcastButtonEvents(XBOXButtonId::GAMEPAD_X);
+	BroadcastButtonEvents(XBOXButtonId::GAMEPAD_Y);
+
+	Vec2 leftThumb, rightThumb;
+	GetLeftThumbStickPosition(leftThumb);
+	GetRightThumbStickPosition(rightThumb);
+
+	XBOXControllerUpdateEvent e(this, this, leftThumb, rightThumb);
+	EventBus::FireEvent(e);
 }
 
-void XBOXController::BroadcastControlPressed(XBOXControlId control)
+void XBOXController::BroadcastButtonEvents(XBOXButtonId button)
 {
-	int previousSet = m_previousState.Gamepad.wButtons & control;
-	int currentSet = m_currentState.Gamepad.wButtons & control;
+	int previousSet = m_previousState.Gamepad.wButtons & button;
+	int currentSet = m_currentState.Gamepad.wButtons & button;
 	if( !previousSet && currentSet )
 	{
-		XBOXControllerEvent e(this, this, control);
+		XBOXControllerButtonEvent e(this, this, button, ButtonEventType::BUTTON_PRESSED);
+		EventBus::FireEvent(e);
+	}
+	else if( previousSet && !currentSet )
+	{
+		XBOXControllerButtonEvent e(this, this, button, ButtonEventType::BUTTON_RELEASED);
 		EventBus::FireEvent(e);
 	}
 }

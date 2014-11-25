@@ -11,6 +11,7 @@ namespace Infrastructure
 
 class DemoEventHandler;
 class DemoRenderer;
+class Player;
 	
 typedef std::list<Infrastructure::HandlerRegistration*> HandlerRegistrationList;
 typedef std::list<Infrastructure::HandlerRegistration*>::iterator HandlerRegistrationItr;
@@ -21,6 +22,7 @@ private:
 	bool m_Run;
 	Infrastructure::XBOXController * m_pController;
 	DemoRenderer * m_pRenderer;
+	Player * m_pPlayer;
 
 	// Events
 	DemoEventHandler * m_pEventHandler;

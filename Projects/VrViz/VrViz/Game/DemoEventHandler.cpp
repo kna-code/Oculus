@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DemoEventHandler.hpp"
 #include <Input\XBOXController.h>
-#include <Input\XBOXControllerEvent.hpp>
+#include <Input\XBOXControllerButtonEvent.h>
 #include "Demo.hpp"
 
 using namespace Infrastructure;
@@ -15,23 +15,26 @@ DemoEventHandler::~DemoEventHandler()
 {
 }
 
-void DemoEventHandler::onEvent(Infrastructure::XBOXControllerEvent * e)
+void DemoEventHandler::onEvent(Infrastructure::XBOXControllerButtonEvent * e)
 {
 	// Ignore the event if it's already been canceled
 	if (e->getCanceled()) {
 		return;
 	}
 
-	printf("XBOXControllerEvent: %d\n", e->GetControlId());
+	printf("XBOXControllerButtonEvent: %d\t%d\n", e->GetButtonId(), e->GetEventType());
 
-	switch (e->GetControlId())
+	if(e->GetEventType() == ButtonEventType::BUTTON_PRESSED)
 	{
-	case XBOXControlId::BACK:
-		m_pDemo->Stop();
-		break;
+		switch (e->GetButtonId())
+		{
+		case XBOXButtonId::BACK:
+			m_pDemo->Stop();
+			break;
 
-	default:
-		break;
+		default:
+			break;
+		}
 	}
 }
 

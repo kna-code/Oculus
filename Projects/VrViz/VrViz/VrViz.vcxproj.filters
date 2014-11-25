@@ -19,6 +19,9 @@
     <Filter Include="Game">
       <UniqueIdentifier>{cf9a187a-9e46-4f9e-b3a0-d3f1ab01dbb4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{251786b8-c53d-4fde-ae63-6b1eb5785b93}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -42,6 +45,15 @@
     <ClInclude Include="Game\DemoRenderer.hpp">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="Tests\OpenSceneGraphTest.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests\XBoxTest.h">
+      <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Player.hpp">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -60,6 +72,15 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Game\DemoRenderer.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\OpenSceneGraphTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Tests\XBoxTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Player.cpp">
       <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>

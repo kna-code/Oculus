@@ -20,8 +20,8 @@
 namespace Infrastructure
 {
 
-// Enum Mapping for the XBox controlls.
-enum XBOXControlId
+// Enum Mapping for the XBOX controlls.
+enum XBOXButtonId
 {
 	DPAD_UP = XINPUT_GAMEPAD_DPAD_UP,
 	DPAD_DOWN = XINPUT_GAMEPAD_DPAD_DOWN,
@@ -72,7 +72,7 @@ private:
 	void NormalizeThumbStickPosition(int x, int y, int deadZone, Vec2 &outValue);
 	float NormalizeTiggerPosition(int value, int deadZone);	
 	void BroadcastEvents();
-	void BroadcastControlPressed(XBOXControlId control);
+	void BroadcastButtonEvents(XBOXButtonId button);
 };
 
 inline bool XBOXController::IsConnected()
@@ -80,12 +80,10 @@ inline bool XBOXController::IsConnected()
 	return 	m_isConnected;
 }
 
-
 inline XINPUT_STATE XBOXController::GetPreviousState()
 {
 	return 	m_previousState;
 }
-
 
 inline XINPUT_STATE XBOXController::GetCurrentState()
 {
