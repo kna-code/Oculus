@@ -44,9 +44,9 @@ void XBOXController::Update()
 		{
 			CopyMemory(&m_previousState, &m_currentState, sizeof(XINPUT_STATE));
 			CopyMemory(&m_currentState, &state, sizeof(XINPUT_STATE));
+					
+			BroadcastEvents();	
 		}
-
-		BroadcastEvents();	
     }
     else
     {		
