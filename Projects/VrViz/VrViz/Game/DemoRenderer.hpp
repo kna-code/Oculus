@@ -4,21 +4,29 @@
 #include <osg\Array>
 
 // Forward Declarations
+namespace osg
+{
+	class Camera;
+}
 namespace osgViewer
 {
 	class CompositeViewer;
-	class View;
+	class View;	
 }
 
 class World;
+class UserInterface;
 
 // Class Definition
 class DemoRenderer
 {
 private:	
 	World * m_pWorld;	
+	UserInterface *m_pUserInterface;
+
 	osg::ref_ptr<osgViewer::CompositeViewer> m_viewer;
-	osg::ref_ptr<osgViewer::View> m_view;
+	osg::ref_ptr<osgViewer::View> m_worldView;
+	osg::ref_ptr<osgViewer::View> m_hudView;
 
 	// Camera
 	osg::Vec3d m_CameraPos;
@@ -42,7 +50,9 @@ public:
 
 private:
 	osgViewer::CompositeViewer * CreateViewer();
-	osgViewer::View * CreateView();
+	osgViewer::View * CreateWorldView();
+	osgViewer::View * CreateHUDView();
 
-	void UpdateCamera();
+	void UpdateWorldCamera();
+	osg::Camera * CreateHUDCamera(int width, int height);
 };

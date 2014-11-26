@@ -160,6 +160,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Tests\OpenSceneGraphTest.h" />
     <ClInclude Include="Tests\XBoxTest.h" />
+    <ClInclude Include="UI\UserInterface.h" />
     <ClInclude Include="World\World.h" />
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +177,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Tests\OpenSceneGraphTest.cpp" />
     <ClCompile Include="Tests\XBoxTest.cpp" />
+    <ClCompile Include="UI\UserInterface.cpp" />
     <ClCompile Include="World\World.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

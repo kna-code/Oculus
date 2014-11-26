@@ -33,10 +33,7 @@ World::World()
 
 World::~World()
 {
-	if(m_Root != NULL)
-	{		
-		m_Root = NULL;
-	}
+	m_Root = NULL;
 }
 
 osg::Node * World::GetRoot()
