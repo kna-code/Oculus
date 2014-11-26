@@ -154,20 +154,19 @@
   <ItemGroup>
     <ClInclude Include="Game\Demo.hpp" />
     <ClInclude Include="Game\DemoEventHandler.hpp" />
-    <ClInclude Include="Game\DemoRenderer.hpp" />
-    <ClInclude Include="Game\Player.hpp" />
+    <ClInclude Include="Game\DemoRenderer.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Tests\OpenSceneGraphTest.h" />
     <ClInclude Include="Tests\XBoxTest.h" />
     <ClInclude Include="UI\UserInterface.h" />
+    <ClInclude Include="World\Player.h" />
     <ClInclude Include="World\World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game\Demo.cpp" />
     <ClCompile Include="Game\DemoEventHandler.cpp" />
     <ClCompile Include="Game\DemoRenderer.cpp" />
-    <ClCompile Include="Game\Player.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -178,6 +177,7 @@
     <ClCompile Include="Tests\OpenSceneGraphTest.cpp" />
     <ClCompile Include="Tests\XBoxTest.cpp" />
     <ClCompile Include="UI\UserInterface.cpp" />
+    <ClCompile Include="World\Player.cpp" />
     <ClCompile Include="World\World.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

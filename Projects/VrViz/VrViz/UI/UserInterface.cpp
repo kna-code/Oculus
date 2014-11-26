@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "UserInterface.h"
 
+#include <stdio.h>
+
 // OSG
 #include <osgUtil/Optimizer>
 #include <osg/Material>
@@ -15,7 +17,13 @@
 #include <osg/Node>
 #include <osgText/Text>
 
-UserInterface::UserInterface()
+// Game
+#include "..\World\World.h"
+#include "..\World\Player.h"
+
+UserInterface::UserInterface(const osg::Vec2 & screenSize)
+	: m_screenSize(screenSize)
+	, m_pPlayerLocText(NULL)
 {	
 	m_Root = new osg::Group();	
 	m_Root->addChild(CreateDisplay());
@@ -24,6 +32,7 @@ UserInterface::UserInterface()
 UserInterface::~UserInterface()
 {
 	m_Root = NULL;
+	m_pPlayerLocText = NULL;
 }
 
 osg::Node * UserInterface::GetRoot()
@@ -33,12 +42,26 @@ osg::Node * UserInterface::GetRoot()
 
 void UserInterface::Update()
 {
-	// TODO: This should update the display scene with the latest values.
+	// Update Player Location
+	{
+		const Player *player = World::Instance()->GetPlayer();
+		
+		const osg::Vec3& pos = player->GetPosition();
+		const float  vertAngle = player->GetViewAngleVertical();
+		const float  horizAngle = player->GetViewAngleHorizontal();
+		
+		const int textLen = 256;
+		char text[textLen];
+		_snprintf(text, textLen, "X: %06.1f\nY: %06.1f\nZ: %06.1f\nVert:   %03.1f\nHoriz:  %03.1f\0",
+				pos.x(), pos.y(), pos.z(), vertAngle, horizAngle);
+
+		m_pPlayerLocText->setText(text);
+
+	}
 }
 
 osg::Geode * UserInterface::CreateDisplay()
 {
-
     osg::Geode* geode = new osg::Geode();
 
     //std::string font(FontFilePath);
@@ -51,92 +74,28 @@ osg::Geode * UserInterface::CreateDisplay()
     osg::Vec3 position(150.0f,800.0f,0.0f);
     osg::Vec3 delta(0.0f,-120.0f,0.0f);
 
-    {
-        osgText::Text* text = new  osgText::Text;
-        geode->addDrawable( text );
-
-        //text->setFont(font);
-        text->setPosition(position);
-        text->setText("Head Up Displays are simple :-)");
-
-		auto f = text->getFont();
-
-        position += delta;
-    }
-	
+	// Player Loc Text
 	{
-        osgText::Text* text = new  osgText::Text;
-        geode->addDrawable( text );
+		m_pPlayerLocText = new osgText::Text();
+		m_pPlayerLocText->setFont(font);
+		m_pPlayerLocText->setPosition(osg::Vec3(GetScreenWidth()-300, 200, 0.0f));
+		m_pPlayerLocText->setText("[Player Location Goes Here");
+		geode->addDrawable( m_pPlayerLocText );
+	}
 
-        //text->setFont(font);
-        text->setPosition(position);
-        text->setText("Head Up Displays are simple :-)");
-
-		auto f = text->getFont();
-
-        position += delta;
-    }
-
-    {
-        osgText::Text* text = new  osgText::Text;
-        geode->addDrawable( text );
-
-        text->setFont(font);
-        text->setPosition(position);
-        text->setText("All you need to do is create your text in a subgraph.");
-
-        position += delta;
-    }
+	// Controls Text
+	{
+		auto text = new osgText::Text();
+		text->setFont(font);
+		text->setPosition(osg::Vec3(GetScreenWidth()-300, GetScreenHeight()-50, 0.0f));
+		text->setText("CONTROLS\nBack: Exit\nStart: Reset");
+		geode->addDrawable( text );
 
 
-    {
-        osgText::Text* text = new  osgText::Text;
-        geode->addDrawable( text );
-
-        text->setFont(font);
-        text->setPosition(position);
-        text->setText("Then place an osg::Camera above the subgraph\n"
-                        "to create an orthographic projection.\n");
-
-        position += delta;
-    }
-
-    {
-        osgText::Text* text = new  osgText::Text;
-        geode->addDrawable( text );
-
-        text->setFont(font);
-        text->setPosition(position);
-        text->setText("Set the Camera's ReferenceFrame to ABSOLUTE_RF to ensure\n"
-                        "it remains independent from any external model view matrices.");
-
-        position += delta;
-    }
-
-    {
-        osgText::Text* text = new  osgText::Text;
-        geode->addDrawable( text );
-
-        text->setFont(font);
-        text->setPosition(position);
-        text->setText("And set the Camera's clear mask to just clear the depth buffer.");
-
-        position += delta;
-    }
-
-    {
-        osgText::Text* text = new  osgText::Text;
-        geode->addDrawable( text );
-
-        text->setFont(font);
-        text->setPosition(position);
-        text->setText("And finally set the Camera's RenderOrder to POST_RENDER\n"
-                        "to make sure it's drawn last.");
-
-        position += delta;
-    }
-
-
+	}
+	
+	// Draws a background box arround the text.
+	/*
     {
         osg::BoundingBox bb;
         for(unsigned int i=0;i<geode->getNumDrawables();++i)
@@ -171,7 +130,7 @@ osg::Geode * UserInterface::CreateDisplay()
         stateset->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
 
         geode->addDrawable(geom);
-    }
+    }*/
 
 	return geode;
 }

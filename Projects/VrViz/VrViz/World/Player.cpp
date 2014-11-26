@@ -1,7 +1,8 @@
 #include "stdafx.h"
-#include "Player.hpp"
-#include <Input\XBOXControllerUpdateEvent.h>
+#include "Player.h"
 #include <math.h>
+
+#include <General\EventBus.hpp>
 
 using namespace Infrastructure;
 
@@ -13,6 +14,15 @@ Player::Player()
 	, m_viewAngleHorizontal(0)
 {
 	Reset();
+
+	// Register for Events	
+	RegisterEventHandler(EventBus::AddHandler<XBOXControllerUpdateEvent>(this));
+}
+
+Player::~Player()
+{
+	// Unregister for Events
+	UnregisterAllEventsHandlers();
 }
 
 void Player::Update()

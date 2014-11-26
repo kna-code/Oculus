@@ -8,6 +8,13 @@
 #include <osg\Transform>
 #include <osg\PositionAttitudeTransform>
 
+#include "Player.h"
+
+// ------------------------------------------------------------------------------------------------------------------------
+// Static Data initialization
+// ------------------------------------------------------------------------------------------------------------------------
+
+//World* World::instance = NULL;
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Constructor
@@ -15,7 +22,9 @@
 
 World::World()
 {
-	m_Root = new osg::Group();
+	m_player = new Player();
+
+	m_root = new osg::Group();
 	osg::Geode * geode = CreateCheckerBoard(10, 10);
 
 	// Center the world at 0,0
@@ -24,7 +33,7 @@ World::World()
 	centerNode->setPosition(osg::Vec3(-bounds.center().x(), -bounds.center().y(), -bounds.center().z()));
 	centerNode->addChild(geode);
     
-	m_Root->addChild(centerNode);
+	m_root->addChild(centerNode);
 }
 
 // ------------------------------------------------------------------------------------------------------------------------
@@ -33,12 +42,10 @@ World::World()
 
 World::~World()
 {
-	m_Root = NULL;
-}
+	m_root = NULL;
 
-osg::Node * World::GetRoot()
-{
-	return m_Root;
+	delete m_player;
+	m_player = NULL;
 }
 
 // ------------------------------------------------------------------------------------------------------------------------

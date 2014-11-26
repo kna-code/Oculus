@@ -21,7 +21,12 @@
       <Command>XCOPY "C:\Dev\GitHub\Oculus\Lib\OpenSceneGraph\3.2.1\build\static\x64\bin\*.dll" "$(TargetDir)" /R /Y
 
 IF NOT EXIST "$(TargetDir)osgPlugins-3.2.1" MKDIR "$(TargetDir)osgPlugins-3.2.1"
-XCOPY "C:\Dev\GitHub\Oculus\Lib\OpenSceneGraph\3.2.1\build\static\x64\bin\osgPlugins-3.2.1\*.dll" "$(TargetDir)osgPlugins-3.2.1" /R /Y</Command>
+XCOPY "C:\Dev\GitHub\Oculus\Lib\OpenSceneGraph\3.2.1\build\static\x64\bin\osgPlugins-3.2.1\*.dll" "$(TargetDir)osgPlugins-3.2.1" /R /Y
+
+IF NOT EXIST "$(TargetDir)data\fonts" MKDIR "$(TargetDir)data\fonts"
+XCOPY "C:\Dev\GitHub\Oculus\Lib\OpenSceneGraph\3.2.1\data\fonts\*.*" "$(TargetDir)data\fonts" /R /Y
+
+</Command>
       <Message>Running Post Build Step...</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>

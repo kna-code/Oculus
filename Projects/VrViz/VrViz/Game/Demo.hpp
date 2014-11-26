@@ -1,32 +1,28 @@
 #pragma once
 
 #include <list>
+#include <General\EventHandlerTracker.h>
 
 namespace Infrastructure
 {
 	class XBOXController;
 	class HandlerRegistration;
-
 }
 
 class DemoEventHandler;
 class DemoRenderer;
 class Player;
-	
-typedef std::list<Infrastructure::HandlerRegistration*> HandlerRegistrationList;
-typedef std::list<Infrastructure::HandlerRegistration*>::iterator HandlerRegistrationItr;
 
-class Demo
+class Demo 
+	: public Infrastructure::EventHandlerTracker 
 {
 private:
 	bool m_Run;
 	Infrastructure::XBOXController * m_pController;
 	DemoRenderer * m_pRenderer;
-	Player * m_pPlayer;
-
+	
 	// Events
 	DemoEventHandler * m_pEventHandler;
-	HandlerRegistrationList m_EventRegistrations;
 
 public:
 	Demo();

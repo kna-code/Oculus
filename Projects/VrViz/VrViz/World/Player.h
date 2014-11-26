@@ -1,6 +1,7 @@
 #pragma once
 
 #include "General\EventHandler.hpp"
+#include "General\EventHandlerTracker.h"
 #include "Input\XBOXControllerUpdateEvent.h"
 #include <osg\array>
 
@@ -9,7 +10,9 @@ namespace Infrastructure
 	class XBOXController;
 }	
 
-class Player : public Infrastructure::EventHandler<Infrastructure::XBOXControllerUpdateEvent>
+class Player 
+	: public Infrastructure::EventHandlerTracker
+	, public Infrastructure::EventHandler<Infrastructure::XBOXControllerUpdateEvent>
 {
 private:
 	float m_moveVelocity;
@@ -20,6 +23,7 @@ private:
 
 public:
 	Player();
+	virtual ~Player();
 
 	void Update();
 	void Reset();

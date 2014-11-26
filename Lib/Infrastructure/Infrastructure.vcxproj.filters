@@ -60,6 +60,12 @@
     <ClInclude Include="Input\XBOXControllerUpdateEvent.h">
       <Filter>Input</Filter>
     </ClInclude>
+    <ClInclude Include="General\Singleton.h">
+      <Filter>General</Filter>
+    </ClInclude>
+    <ClInclude Include="General\EventHandlerTracker.h">
+      <Filter>General</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -75,6 +81,9 @@
       <Filter>Input</Filter>
     </ClCompile>
     <ClCompile Include="General\EventBus.cpp">
+      <Filter>General</Filter>
+    </ClCompile>
+    <ClCompile Include="General\EventHandlerTracker.cpp">
       <Filter>General</Filter>
     </ClCompile>
   </ItemGroup>

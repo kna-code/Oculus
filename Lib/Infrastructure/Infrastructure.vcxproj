@@ -87,8 +87,10 @@
     <ClInclude Include="General\Event.hpp" />
     <ClInclude Include="General\EventBus.hpp" />
     <ClInclude Include="General\EventHandler.hpp" />
+    <ClInclude Include="General\EventHandlerTracker.h" />
     <ClInclude Include="General\HandlerRegistration.hpp" />
     <ClInclude Include="General\Object.hpp" />
+    <ClInclude Include="General\Singleton.h" />
     <ClInclude Include="General\Types.h" />
     <ClInclude Include="General\Vector.h" />
     <ClInclude Include="Input\XBOXController.h" />
@@ -107,6 +109,7 @@
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="General\EventBus.cpp" />
+    <ClCompile Include="General\EventHandlerTracker.cpp" />
     <ClCompile Include="Infrastructure.cpp" />
     <ClCompile Include="Input\XBOXController.cpp" />
     <ClCompile Include="stdafx.cpp">

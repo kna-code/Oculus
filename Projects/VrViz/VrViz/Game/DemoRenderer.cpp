@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include <math.h>
 #include <Windows.h>
-#include "DemoRenderer.hpp"
+#include "DemoRenderer.h"
 #include "../World/World.h"
 #include "../UI/UserInterface.h"
 #include <osgViewer/CompositeViewer>
@@ -11,7 +11,6 @@
 
 DemoRenderer::DemoRenderer()
 	: m_viewer(NULL)
-	, m_pWorld(NULL)
 	, m_pUserInterface(NULL)
 	, m_worldView(NULL)
 	, m_hudView(NULL)
@@ -31,27 +30,31 @@ DemoRenderer::~DemoRenderer()
 		delete m_pUserInterface;
 		m_pUserInterface = NULL;
 	}
-
-	if(m_pWorld != NULL)
-	{
-		delete m_pWorld;
-		m_pWorld = NULL;
-	}
 }
 
 void DemoRenderer::Initialize()
 {
+	// Get the Resolution
+	osg::GraphicsContext::WindowingSystemInterface* wsi = osg::GraphicsContext::getWindowingSystemInterface();
+	if (!wsi)
+	{
+		osg::notify(osg::NOTICE)<<"Error, no WindowSystemInterface available, cannot create windows."<<std::endl;
+		return;
+	}
+	unsigned int width, height;
+	wsi->getScreenResolution(osg::GraphicsContext::ScreenIdentifier(0), width, height);
+
+
 	// Create the Window
-	m_viewer = CreateViewer();
+	m_viewer = CreateViewer(width, height);
 
 	// Create World	
-	m_pWorld = new World();
 	m_worldView = CreateWorldView();
 	m_viewer->addView(m_worldView);
 
 	// Create UI	
-	m_pUserInterface = new UserInterface();
-	m_hudView = CreateHUDView();
+	m_pUserInterface = new UserInterface(osg::Vec2(width, height));
+	m_hudView = CreateHUDView(width, height);
 	m_viewer->addView(m_hudView);
 
 	// Initialize the Viewer for the data.	
@@ -62,6 +65,7 @@ void DemoRenderer::Initialize()
 void DemoRenderer::Update()
 {	
 	UpdateWorldCamera();
+	m_pUserInterface->Update();
 	m_viewer->frame();
 }
 
@@ -99,19 +103,8 @@ float DemoRenderer::GetCameraYaw()
 // Private Methods
 //---------------------------------------------------------------------------
 
-osgViewer::CompositeViewer * DemoRenderer::CreateViewer()
+osgViewer::CompositeViewer * DemoRenderer::CreateViewer(int width, int height)
 {
-	// Setup the Screen Size
-	osg::GraphicsContext::WindowingSystemInterface* wsi = osg::GraphicsContext::getWindowingSystemInterface();
-	if (!wsi)
-	{
-		osg::notify(osg::NOTICE)<<"Error, no WindowSystemInterface available, cannot create windows."<<std::endl;
-		return NULL;
-	}
-
-	unsigned int width, height;
-	wsi->getScreenResolution(osg::GraphicsContext::ScreenIdentifier(0), width, height);
-	
 	osg::ref_ptr<osg::GraphicsContext::Traits> traits = new osg::GraphicsContext::Traits;
 	traits->x = 100;
 	traits->y = 100;
@@ -149,17 +142,17 @@ osgViewer::View * DemoRenderer::CreateWorldView()
 	osgViewer::View* view = new osgViewer::View;
 	view->setName("World View");		
 	view->setUpViewOnSingleScreen(0);
-	view->setSceneData(m_pWorld->GetRoot());
+	view->setSceneData(World::Instance()->GetRoot());
 	return view;
 }
 
-osgViewer::View * DemoRenderer::CreateHUDView()
+osgViewer::View * DemoRenderer::CreateHUDView(int width, int height)
 {
 	osgViewer::Viewer::Windows windows;
     m_viewer->getWindows(windows);
 
 	//TODO: Get Screen resolution.
-	osg::Camera * hudCamera = CreateHUDCamera(1920,1600);
+	osg::Camera * hudCamera = CreateHUDCamera(width,height);
 	hudCamera->addChild(m_pUserInterface->GetRoot());
 
 	hudCamera->setGraphicsContext(windows[0]);

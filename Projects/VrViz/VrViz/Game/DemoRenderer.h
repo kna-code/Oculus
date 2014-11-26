@@ -21,7 +21,6 @@ class UserInterface;
 class DemoRenderer
 {
 private:	
-	World * m_pWorld;	
 	UserInterface *m_pUserInterface;
 
 	osg::ref_ptr<osgViewer::CompositeViewer> m_viewer;
@@ -49,9 +48,9 @@ public:
 	float GetCameraYaw();
 
 private:
-	osgViewer::CompositeViewer * CreateViewer();
+	osgViewer::CompositeViewer * CreateViewer(int width, int height);
 	osgViewer::View * CreateWorldView();
-	osgViewer::View * CreateHUDView();
+	osgViewer::View * CreateHUDView(int width, int height);
 
 	void UpdateWorldCamera();
 	osg::Camera * CreateHUDCamera(int width, int height);

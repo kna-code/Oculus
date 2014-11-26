@@ -1,12 +1,15 @@
 #include "stdafx.h"
 
-#include <Input/XBOXController.h>
 #include <General\EventBus.hpp>
+#include <Input\XBOXController.h>
+#include <Input\XBOXControllerButtonEvent.h>
 
 #include "Demo.hpp"
 #include "DemoEventHandler.hpp"
-#include "DemoRenderer.hpp"
-#include "Player.hpp"
+#include "DemoRenderer.h"
+
+#include "..\World\World.h"
+#include "..\World\Player.h"
 
 using namespace Infrastructure;
 
@@ -14,11 +17,9 @@ Demo::Demo()
 : m_Run(false)
 {
 	// Create the objects
-	m_pPlayer = new Player();
 	m_pController = new XBOXController(1);	
 	m_pRenderer = new DemoRenderer();
 	m_pEventHandler = new DemoEventHandler(this);	
-	
 }
 
 Demo::~Demo()
@@ -27,9 +28,6 @@ Demo::~Demo()
 
 	delete m_pController;
 	m_pController = NULL;
-
-	delete m_pPlayer;
-	m_pPlayer = NULL;
 
 	delete m_pRenderer;
 	m_pRenderer = NULL;
@@ -43,10 +41,11 @@ void Demo::Run()
 	m_Run = true;
 
 	// Register for Events
-	m_EventRegistrations.push_back(EventBus::AddHandler<XBOXControllerButtonEvent>(m_pEventHandler));
-	m_EventRegistrations.push_back(EventBus::AddHandler<XBOXControllerUpdateEvent>(m_pPlayer));
+	RegisterEventHandler(EventBus::AddHandler<XBOXControllerButtonEvent>(m_pEventHandler));
 
 	// Create the Renderer
+	World::CreateInstance();
+
 	m_pRenderer->Initialize();
 
 	// Run the game loop....
@@ -56,9 +55,10 @@ void Demo::Run()
 
 		if(m_Run)
 		{
-			const osg::Vec3 &pos = m_pPlayer->GetPosition();
-			const float angleVert = m_pPlayer->GetViewAngleVertical();
-			const float angleHoriz = m_pPlayer->GetViewAngleHorizontal();
+			const Player *player = World::Instance()->GetPlayer();
+			const osg::Vec3 &pos = player->GetPosition();
+			const float angleVert = player->GetViewAngleVertical();
+			const float angleHoriz = player->GetViewAngleHorizontal();
 			printf("Player: X=%.1f\tY=%.1f\tZ=%0.1f\tPitch=%0.1f\tYaw=%0.1f\n",
 				pos.x(), pos.y(), pos.z(), angleVert, angleHoriz);
 
@@ -81,20 +81,13 @@ void Demo::Stop()
 
 	m_Run = false;
 
-	// Unregister Events
-	for(HandlerRegistrationItr itr = m_EventRegistrations.begin();
-		itr != m_EventRegistrations.end();
-		++itr)
-	{
-		HandlerRegistration * reg = (*itr);
-		reg->removeHandler();
-		delete reg;
-	}
-	m_EventRegistrations.clear();
+	UnregisterAllEventsHandlers();
+		
+	World::DestroyInstance();
 
 }
 
 void Demo::Reset()
 {
-	m_pPlayer->Reset();
+	World::Instance()->GetPlayer()->Reset();
 }
